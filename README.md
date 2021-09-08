@@ -90,9 +90,17 @@ npm start - 리액트를 실행 할수있다
 ctrl + c - cmd,powershell 등에서 실행중인 프로그램을 종료 할수있다
 
 
-
 ### 3장-2 첫번째 리액트 기초개념: 컴포넌트
 
-### 3장-2 두번째 리액트 기초개념: JSX
-
-### 3장-2 세번째 리액트 기초개념: props
+컴포넌트의 정의
+<pre>
+<code>
+function App() {
+    return (
+        <div>Hello world!!!!!!!!!</div>
+    );
+}
+export default App;
+</code>
+</pre>
+ 위와 같은 형태를 컴포넌트를 정의 한다고 할수 있다
