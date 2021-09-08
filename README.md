@@ -1,70 +1,98 @@
-# Getting Started with Create React App
+# 박민형 [201840212]
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## [09.08 2주차 수업]
 
-## Available Scripts
+npm start : 리액트 앱 실행하는 명령어
 
-In the project directory, you can run:
+깃허브에 업로드 하기
+ > \>git init
+ Initialized empty Git respnsitory in 경로
+또는
+Reinitialized existing Git resitory in 경로
 
-### `npm start`
+둥중 하나의 문구가 뜨면 성공
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+create a new repository 에서 깃허브 저징소 생성
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+#### 리액트앱 만들고 살펴보기
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+##### 1. 리액트앱 프로젝트 폴더 살펴보기
+    1.프로젝트 폴더는 node , modules , public , src 로 이루어져 있다
+    2.node_module 폴더는 사용할일이 없다 주로 public,src는 자주 사용함
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+##### 2. public 폴더 살펴보기
+    1. favicon.ico 파일은 제목과 함께 브라우저에 보이는 아이콘
+    2. index.html 기본적인 내용만 적혀있다
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+##### 3.src 폴더 살펴보기
+    1. app.css , app.js , app.test.js 등 많은 파일이 존재한다
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+##### 4. index.js파일수정
+    src 폴더에서 정리하고 남은 index.js파일을 수정한다
+    수정한 코드
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<pre>
+<code>
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import App from './App';
+    ReactDOM.render(
+    <\App>,
+    document.getElementById('root')
+    );
+</code>
+</pre>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+##### 5. app.js 수정하기
+    index.js 파일을 수정하고 app.js파일도 이어서 수정한다
+    
+<pre>
+<code>
+    import React from 'react'; <-최신버전에서는 생략가능
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    function App() {
+        return <\div className="App" />;
+    }
+    export default App;
+</code>
+</pre>
+이후 다시 실행해보면 실행은 되지만 백지만 뜨게 된다
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+### 리액트 동작 원리 살펴보기
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+작성된 프로젝트 폴더 내부의 코드를 자바스크립트를 이용해서 해석하며 그 결과물을 index.html로 끼워 넣는다
 
-### Analyzing the Bundle Size
+##### 1. index.js 살펴보기
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+<code>
+    ReactDOM.render(<\App />,document.getElementById('root'));
+</code>
+app 컴포턴트를 아이디가 root 인곳에 뿌려준다 라는 의미로 해석이 가능하다
 
-### Making a Progressive Web App
+##### 2. index.html 수정하기
+div id를 root 에서 potato 로 바꾼다면
+->앱이 실행 되지않는다
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+##### 3. index.js 수정하여 오류 고치기
+getElementById('potato'); 로 고치면 오류가 고쳐진다.
 
-### Advanced Configuration
+## 3장 리액트 기초 개념 알아보기
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 3장-1 리액트 실행 복습
+npm start - 리액트를 실행 할수있다
+ctrl + c - cmd,powershell 등에서 실행중인 프로그램을 종료 할수있다
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+### 3장-2 첫번째 리액트 기초개념: 컴포넌트
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 3장-2 두번째 리액트 기초개념: JSX
+
+### 3장-2 세번째 리액트 기초개념: props
