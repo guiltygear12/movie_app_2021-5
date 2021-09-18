@@ -17,7 +17,7 @@ const foodLike = [
   }
 ]
 
-function App() {
+function App() {  
   return (
     <div>
       {foodLike.map(dish=>(
