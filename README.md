@@ -2,6 +2,207 @@
 
 <hr>
 
+##  [09.29 5주차 수업]
+##### ※ 4주차는 휴강
+
+#### 04-4 음식앱에 prop-types 도입하기
+
+##### prop-types 설치하기
+
+> npm install prop-types
+
+##### package.json 파일 확인
+
+> package.json 파일내부에 dependencies 키안에 값을 살펴보자
+"prop-types":"~~~~~~~" 이게 존재한다면 성공
+
+
+###### ★★ prop-types가 뭐지?
+prop types란 컴포넌트가 전달받은 props가 정말 내가 원하는 값인지 확인 해준다
+a props를 전달해야되는데 b props를 전달하게되면 오류메세지를 보내주는 기능이다
+
+##### prop-types 적용하기
+
+<code>
+// 상단에 import 해주기 <br>
+// "Proptypes"는 일종의 객체를 생성하는 개념과 유사해서 변경이 가능함
+import Proptypes from 'prop-types';
+</code>
+
+##### prop-types 작성하기
+
+<pre>
+<code>
+Food.prototype={
+  name: proptypes.string.isRequired,
+  picture: proptypes.string.isRequired,
+  rating: proptypes.string.isRequired,
+}
+</code>
+</pre>
+
+해당 코드 삽입후 큰 문제가 발생하지 않겠지만 콘솔창에서 오류가 발생한다
+그 이유는 rating의 자료형을 number이지만 여기에서는 string으로 선언해서그렇다
+저부분을 number로 변경하면 문제가 해결된다
+
+##### isRequired 알아보기
+
+proptyeps에 마지막 부분에보면 isRequired가 존재하는데 의미는 반드시 필요하다 는 뜻이다
+앞에 적힌 형태의 자료형의 값이 반드시 필요하다는 뜻이다 만약 isRequired가 없다면 다른 형태로 와도 문제가 없다는 의미가 된다
+
+### 5장 state 클래스형 컴포넌트
+
+props가 다루지못하는 동적인 데이터를 다룰때 사용합니다
+
+#### 05-1 state로 숫자 증감 기능 만들어보기
+
+<pre>
+<code>
+import React from 'react'
+
+// 클래스형 컴포넌트가 되기위해서는 해당 클래스가 react가 제공하는 component를 상속받아야됩니다
+class App extends React.Component{
+  
+  state={
+    count:0,
+  }
+  
+  // 자바스크립트 혹은 다른언어를 사용하면 ++ 이나 다른 연산자를 사용하겠지만
+  // 리엑트에서는 사용이 불가능하다
+add=()=>{
+  console.log('add');
+}
+
+minus=()=>{
+  console.log('minus');
+}
+
+  render(){
+    return(
+      < div>
+        < h1>THE Number is: {this.state.count}</ h1>
+        < button onClick={this.add}>Add</ button>
+        < button onClick={this.minus}>Minus</ button>
+      </ div>
+    )
+  }
+}
+
+export default App;
+</code>
+</pre>
+
+
+
+#### 05-2 숫자증감기능 제대로 만들기
+
+<pre>
+<code>
+import React from 'react'
+
+// 클래스형 컴포넌트가 되기위해서는 해당 클래스가 react가 제공하는 component를 상속받아야됩니다
+class App extends React.Component{
+  
+  state={
+    count:0,
+  }
+  
+
+//해당 방법으로도 숫자를 변경하는 방법으로서 가능하지만 일부 성능이 저하되는 현상이 발생할수있으므로 지양하는것이 좋다
+add=()=>{
+  this.setState(current=>(
+      {count:this.state.count + 1
+    }))
+}
+
+// 해당방법으로 하는것을 권장한다
+minus=()=>{
+  this.setState(current=>(
+    {count:current.count-1
+  }))
+}
+
+  render(){
+    return(
+      < div>
+        < h1>THE Number is: {this.state.count}</ h1>
+        < button onClick={this.add}>Add</ button>
+        < button onClick={this.minus}>Minus</ button>
+      </ div>
+    )
+  }
+}
+
+export default App;
+</code>
+</pre>
+
+#### 05-3 클래스형 컴포넌트의 일생 알아보기
+
+<pre>
+<code>
+import React from 'react'
+
+// 클래스형 컴포넌트가 되기위해서는 해당 클래스가 react가 제공하는 component를 상속받아야됩니다
+class App extends React.Component{
+  
+constructor(props){
+  // render 함수보다 먼저 실행되게 된다
+    super(props);
+    console.log('hello')
+  }
+  
+  state={
+    count:0,
+  }
+  
+add=()=>{
+  this.setState(current=>(
+      {count:current.count+1
+    }))
+}
+
+minus=()=>{
+  this.setState(current=>(
+    {count:current.count-1
+  }))
+}
+
+// render() 함수보다 뒤에 실행된다
+componentDidMount(){
+  console.log('component rendered')
+}
+
+// 해당 함수는 화면이 업데이트 되는 경우에 실행된다
+componentDidUpdate(){
+  console.log("i' just updated")
+}
+
+// 컴포넌트가 종료될때 실행된다
+componentWillUnmount(){
+  console.log("Good bye, cruel world")
+}
+
+  render(){
+    console.log("i'm rendering")
+    return(
+      < div>
+        < h1>THE Number is: {this.state.count}</ h1>
+        < button onClick={this.add}>Add</ button>
+        < button onClick={this.minus}>Minus</ button>
+      </ div>
+    )
+  }
+}
+
+export default App;
+</code>
+</pre>
+
+
+
+<hr>
+
 ## [09.15 3주차 수업]
 
 #### 03-3 2번째 리액트 기초개념: JSX
@@ -23,6 +224,7 @@ ReactDOM.render(
 저 위치에 자신이 만든 컴포넌트를 연결하면 실행될것 같지만 오류가 발생한다 그이유는
 <STRONG>리액트는 실행시에 하나의 컴포넌트만 실행하기에 오류가 발생한다</STRONG>
 해결방법으로는 1번 컴포넌트 안에 자신이 만든 2,3번째 컴포넌트를 연결하는 방법이 있다
+
 #### 03-4 세번째 리액트 기초 개념: props
 
 props는 컴포넌트에서 컴포넌트로 전달되는 데이터를 의미한다

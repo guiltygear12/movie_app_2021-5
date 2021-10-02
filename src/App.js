@@ -1,41 +1,47 @@
+import {Component} from 'react'
 
-const foodLike = [
-  {
-    id: 1,
-    name:"Neng-Myeon",
-    image:"https://thejincook.com/upload/menu_01/2019_05_10/hero_6iioG_2019_05_10_16_04_36.jpg"
-  },
-  {
-    id: 2,
-    name:"TTek-Bokk-KKi",
-    image:"https://t1.daumcdn.net/cfile/tistory/99DDDC445BD839460C"
-  },
-  {
-    id: 3,
-    name:"Gan-JJa-Jang",
-    image:"http://ojsfile.ohmynews.com/STD_IMG_FILE/2016/1214/IE002069160_STD.jpg"
+class App extends Component{
+  constructor(props){
+    super(props);
+    console.log('hello')
   }
-]
-
-function App() {  
-  return (
-    <div>
-      {foodLike.map(dish=>(
-        <Food key={dish.id} name={dish.name} picture={dish.image}/>
-      ))}  
-    </div>
-  )
+  
+  state={
+    count:0,
+  }
+  
+add=()=>{
+  this.setState(current=>(
+      {count:current.count+1
+    }))
 }
 
-function Food({name,picture}){
-  return (
-    <div>
-      <h1>I Like {name}!</h1>
-      <img src={picture} alt={name} />
-    </div>
-  )
+minus=()=>{
+  this.setState(current=>(
+    {count:current.count-1
+  }))
 }
 
+componentDidMount(){
+  console.log('component rendered')
+}
+componentDidUpdate(){
+  console.log("i' just updated")
+}
+componentWillUnmount(){
+  console.log("Good bye, cruel world")
+}
 
+  render(){
+    console.log("i'm rendering")
+    return(
+      <div>
+        <h1>THE Number is: {this.state.count}</h1>
+        <button onClick={this.add}>Add</button>
+        <button onClick={this.minus}>Minus</button>
+      </div>
+    )
+  }
+}
 
-export default App
+export default App;
