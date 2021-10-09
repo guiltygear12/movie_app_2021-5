@@ -2,6 +2,94 @@
 
 <hr>
 
+## [ 10.06 6주치 수업]
+
+#### 05-4 영화 앱 만들기 워밍업
+
+이번 파트에서부터 실질적인 프로젝트 진행을 위해 파일을 처음부터 코딩하기 시작합니다
+<pre>
+<code>
+
+import React from 'react'
+
+class App extends React.Component{
+  
+  state={
+    isLoading:true, //true->로딩완료 , false->로딩중 을 출력할수있도록
+    movies:[],
+  }
+
+  componentDidMount(){
+    setTimeout(()=>{ // 첫번째 인자로 setTimeout()을 전달
+      this.setState({isLoading:false}) //state를 setstate()함수를 활용
+    },6000) // 두번째 인자로 6000을 보내어 6초를 대기하도록 전달
+  }
+
+  render(){
+    const{ isLoading } = this.state; //구조분해 할당을 통하여 this.state에 있는 isloading우선해서 얻으면 this.state를 매번 입력하는 수고를 덜어줄수있다
+    return(
+      < div>
+        {isLoading ? '데이터를 불러오는 중 입니다...':'데이터 불러오기 완료!'}
+        // 삼항연산자를 통하여 필요한 문구를 출력하는 영역
+      </ div>
+    )
+  }
+}
+
+export default App;
+
+</code>
+</pre>
+
+### 6장 본격적으로 영화앱 만들기 
+현재까지 진행한 코드
+
+<pre>
+<code>
+import React from 'react'
+import axios from 'axios' // axios 를 사용할수있도록 import
+
+class App extends React.Component{
+  
+  state={
+    isLoading:true,
+    movies:[],
+  }
+
+  getMovies= async ()=>{
+    const {
+      data:{
+        data:{movies}, // 이곳에서 구조분해할당을 사용하도록 수정
+      },
+    } = await axios.get('https://yts-proxy.now.sh/list_movies.json');
+    console.log(movies)
+  }
+
+  componentDidMount(){
+    this.getMovies();
+  }
+
+  render(){
+    const{ isLoading } = this.state;
+    return(
+      < div>
+        {isLoading ? '데이터를 불러오는 중 입니다...':'데이터 불러오기 완료!'}
+      </ div>
+    )
+  }
+}
+
+export default App;
+</code>
+</pre>
+
+await
+  -> await 뒷쪽에 있는 axios.get() 함수를 기다리도록 명령
+async
+  -> 자바스크립트에게 getMovies()함수에게 시간이 필요하다고 알림
+
+<hr>
+
 ##  [09.29 5주차 수업]
 ##### ※ 4주차는 휴강
 
