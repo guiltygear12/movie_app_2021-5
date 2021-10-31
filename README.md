@@ -6,9 +6,9 @@
 
 #### 7장 정리 
 
-<pre>
-<code>
-```js
+
+``` javascript:app.js
+
 import React from 'react'
 import axios from 'axios'
 import Movie from './movie'
@@ -67,9 +67,6 @@ class App extends React.Component{
 }
 export default App;
 ```
-</code>
-</pre>
-
 
 <hr>
 
