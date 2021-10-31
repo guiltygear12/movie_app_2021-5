@@ -4,10 +4,10 @@
 
 ## [10/27 9주차 수업 ]
 
-#### 7장 정리 
+#### 6장 정리 
 
 
-``` javascript:app.js
+```js
 
 import React from 'react'
 import axios from 'axios'
@@ -39,15 +39,15 @@ class App extends React.Component{
   render(){
     const{ isLoading, movies } = this.state;
     return(
-      < section className="container">
+      < section class="container"> 하나로 묶어주는 영역
         { isLoading ? (
-            < div className="loader">
+            < div class="loader"> // loading 영역을 추가
               < span className="loader-text">
                 Loading...
               </ span>
             </ div>
           ):(
-            < div className="movies">
+            < div class="movies"> //movie 컴포넌트를 감싸주는 영역
               {movies.map(movie => (
                 < Movie
                     key={movie.id}
@@ -56,7 +56,6 @@ class App extends React.Component{
                     title={movie.title}
                     summary={movie.summary}
                     poster={movie.medium_cover_image}
-                    genres={movie.genres}
                 />
               ))}
             </ div>
@@ -67,6 +66,215 @@ class App extends React.Component{
 }
 export default App;
 ```
+
+```js
+import React from "react";
+import PropTypes from 'prop-types';
+import "./Movie.css"
+
+function Movie({ year, title, summary, poster}){
+    return(
+        <div className="movie">
+        // 이미지 추가하는 영역
+            <img src={poster} alt={title} title={title}></img>
+            <div className="movie-data">
+                // 영화의 제목,출시연도,설명을 출력하는 영역
+                <h3 className="movie-title" style={{backgroundColor:'white'}}>{title}</h3>
+                <h5 className="movie-year">{year}</h5>
+                <p className="movie-summary">{summary}</p>
+            </div>
+        </div> 
+    ) 
+}
+
+Movie.propTypes={
+    id:PropTypes.number.isRequired,
+    year:PropTypes.number.isRequired,
+    title:PropTypes.string.isRequired,
+    summary:PropTypes.string.isRequired,
+    poster:PropTypes.string.isRequired,
+};
+
+export default Movie;
+
+```
+
+## 7장 영화앱 다듬기
+
+### 7-1  영화앱 전체모습 수정하기
+
+https://yts-proxy.now.sh/list_movies.json?sort_by=rating
+영화 장르에 대한 정보를 가져오기위해 위 주소에서 확인한다
+
+<img src="./readme_img/1027_01.PNG" width="450px" height="300px" alt="이미지"></img><br/>
+
+
+#### 7장 정리
+
+##### app.js
+```js
+import React from 'react'
+import axios from 'axios'
+import Movie from './movie'
+import "./App.css"
+
+class App extends React.Component{
+  
+  state={
+    isLoading:true,
+    movies:[],
+  }
+
+  getMovies= async ()=>{
+    const {
+      data:{
+        data:{movies},
+    },
+      } = await axios.get('https://yts-proxy.now.sh/list_movies.json?sort_by=rating');
+    // console.log(movies) 데이터 확인용 콘솔
+    this.setState({movies,isLoading:false})
+    console.log(movies)
+  }
+
+  componentDidMount(){
+    this.getMovies();
+  }
+
+  render(){
+    const{ isLoading, movies } = this.state;
+    return(
+      <section className="container">
+        { isLoading ? (
+            <div className="loader">
+              <span className="loader-text">
+                Loading...
+              </span>
+            </div>
+          ):(
+            <div className="movies">
+              {movies.map(movie => (
+                <Movie
+                    key={movie.id}
+                    id={movie.id}
+                    year={movie.year}
+                    title={movie.title}
+                    summary={movie.summary}
+                    poster={movie.medium_cover_image}
+                    genres={movie.genres}
+                />
+              ))}
+            </div>
+          )}
+      </section>
+    );
+  }
+}
+
+export default App;
+
+```
+##### movie.js
+```js
+import React from "react";
+import PropTypes from 'prop-types';
+import "./Movie.css"
+
+function Movie({ id, year, title, summary, poster, genres}){
+    return(
+      // class -> className 으로 해주어야 오류가 발생하지 않는다
+      // jsx 가 html의 class와 혼동을 할 여지가 있기때문에 바꿔서 적어주어야 오류가 없어진다.
+        <div className="movie">
+            <img src={poster} alt={title} title={title}></img>
+            <div className="movie-data">
+                <h3 className="movie-title" style={{backgroundColor:'white'}}>{title}</h3>
+                <h5 className="movie-year">{year}</h5>
+                <ul className="movie-genres">
+                // genres 에는 배열의 원소 / index에는 몇번째인지 숫자가 전달됩니다
+                    {genres.map((genres,index)=>{
+                        //key 프롭스 추가를 해줌으로서 해당 오류는 없어진다.
+                        return<li key={index} className="movie-genres">{genres}</li>
+                    })}
+                </ul>
+                // 시놉시스를 180자로 제한하고 180자 이후의 내용은 ...으로 말줄임
+                <p className="movie-summary">{summary.slice(0,180)}...</p> 
+            </div>
+        </div> 
+    ) 
+}
+
+Movie.propTypes={
+    id:PropTypes.number.isRequired,
+    year:PropTypes.number.isRequired,
+    title:PropTypes.string.isRequired,
+    summary:PropTypes.string.isRequired,
+    poster:PropTypes.string.isRequired,
+    genres:PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default Movie;
+```
+
+## 8장 영화앱에 여러 기능 추가하기
+#### 08-1 react-router-dom 설치및 프로젝트 폴더 정리
+
+##### react-router-dom 설치하기
+> npm install react-router-dom
+
+##### 프로젝트 폴더 정리하기
+<img src="./readme_img/1027_02.PNG" width="300px" height="600px" alt="이미지"></img><br/>
+
+##### css를 통해 영화앱 꾸미기
+<img src="./readme_img/1027_04.PNG" width="40%" height="100%" alt="이미지"></img>
+<img src="./readme_img/1027_05.PNG" width="40%" height="100%" alt="이미지"></img><br/>
+
+css에서 미디어 쿼리를 사용하여 좌우 크기가 넓은 화면일때 양옆으로 2개의 영화를 출력해주고
+스마트폰과 같이 좁은 화면에서는 하나의 영화를 출력해주도록 수정한다
+
+##### 라우터 동작 확인하기
+
+```js
+// app.js
+import "./App.css"
+import { HashRouter , Route } from 'react-router-dom'
+import About from './routes/About'
+import Home from './routes/Home'
+
+function App(){
+  return (
+      <HashRouter>
+        <Route path="/" exact={true} component={Home}/>
+        //  /about로 about.js를 연결하도록 경로 설정
+        <Route path="/about" component={About}/>
+      </HashRouter>
+  );
+}
+
+export default App;
+```
+
+```js
+// about.js
+import './About.css';
+
+
+function About() {
+  return (
+      <div className="about-container">
+          <span>
+          “Freedom is the freedom to say that two plus two make four. If that is granted, all else
+        follows.”
+          </span>
+          <span>
+          - George Orwell, 1984
+          </span>
+      </div>
+  );
+}
+
+export default About;
+```
+<img src="./readme_img/1027_03.PNG" width="100%" height="100%" alt="이미지"></img>
+
 
 <hr>
 
