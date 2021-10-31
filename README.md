@@ -8,7 +8,7 @@
 
 <pre>
 <code>
-```java
+```javascript
 import React from 'react'
 import axios from 'axios'
 import Movie from './movie'
