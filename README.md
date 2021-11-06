@@ -2,6 +2,118 @@
 
 <hr>
 
+## [11/03 10주차 수업 ]
+
+> 오늘 주요내용
+>> 라우터 / 네비게이션 기능 추가하기                 
+
+##### 라우터의  기능
+> 라우터는 사용자가 입력한 url을 통해 특정 컴포넌트를 불러오는 기능을 수행합니다
+>> 예를들어 local:3000/home 를 요청한다면 home 컴포넌트를, local:3000/about를 요청하면 about 컴포넌트를  불러주는 역활을 수행합니다
+>> react-router-dom 은 이런 기능을 사용할수있도록 여러종류의 라우터 기능을 제공합니다.
+
+>컴포넌트 기능 사용하기
+
+```js
+// app.js
+import "./App.css"
+// 리엑터 import
+import { HashRouter , Route } from 'react-router-dom'
+import About from './routes/About'
+import Home from './routes/Home'
+import Navigation from "./components/Navigation"
+import Detail from "./routes/Detail"
+function App(){
+  return (
+      <HashRouter>
+        <Navigation />
+        <Route path="/" exact={true} component={Home}/>
+        <Route path="/about" component={About}/>
+        <Route path="/movie-detail" component={Detail}/>
+      </HashRouter>
+  );
+}
+export default App;
+
+// about.js
+import './About.css';
+function About(props) {
+  console.log(props)
+  return (
+      <div className="about-container">
+          <span>
+          “Freedom is the freedom to say that two plus two make four. If that is granted, all else
+        follows.”
+          </span>
+          <span>
+          - George Orwell, 1984
+          </span>
+      </div>
+  );
+}
+export default About;
+```
+
+##### 내비게이션 만들기
+
+```js
+import {Link} from 'react-router-dom';
+import "./Navigation.css"
+
+function Navigation(){
+    return(
+        <div className="nav">
+            <Link to="/">Home</Link>
+            <Link to="/about">About</Link>
+        </div>
+    )
+}
+
+export default Navigation
+```
+
+
+##### 리다이렉트 기능 구현하기
+
+>특정 데이터가 존재하지않는 등의 이유로 페이지를 원활하게 출력할수없을때 사용자를 특정페이지로 되돌아가도록 하는 기능
+
+```js
+import React from "react"
+
+class Detail extends React.Component{
+    componentDidMount(){
+      // detail 컴포넌트가 마운트 되면
+        const{ location, history } = this.props
+        // 구조분해 할당을 통해 location / history를 가져온다
+        if(location.state === undefined){
+            history.push('/')
+            // location.state가 존재하지않을경우에 home으로 돌아가도록합니다.
+        }
+    }
+
+    render(){
+        const{ location } = this.props
+        // 영화 제목 출력해주도록 설정
+        // location.state가 없으면 해당 함수가 null로 반환하도록 수정
+        if(location.state){
+            return(
+                <span>
+                    {location.state.title}
+                </span>
+            )
+        } else {
+            return null
+        }
+        
+    }
+}
+
+export default Detail
+```
+
+
+<hr>
+
 ## [10/27 9주차 수업 ]
 
 #### 6장 정리 
