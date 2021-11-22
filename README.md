@@ -2,6 +2,68 @@
 
 <hr>
 
+## [11/17 12주차 수업]
+
+REACT 공식문서
+애플리케이션 TODO LIST
+
+keysms 프롭스를 안정적으로 활용하기위해 고유성을 부여하는 역활수행
+프롭스의 변경,삭제,추가등을 식별하는것을 서포트해준다
+date를 사용하지않고 고유의 index값을 사용해도된다
+유일값이라면 상관없다
+
+
+외부컴포넌트를 사용하기위해 생성자 내부에 객체 생성
+
+```js
+import React from "react"
+import { Remarkable } from 'remarkable'
+import './App.css';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.md = new Remarkable();
+    this.handleChange = this.handleChange.bind(this);
+    this.state = { value: 'Hello, **world**!' };
+  }
+
+  handleChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
+  getRawMarkup() {
+    return { __html: this.md.render(this.state.value) };
+  }
+
+  render() {
+    return (
+      <div className="MarkdownEditor">
+        <h3>Input</h3>
+        <label htmlFor="markdown-content">
+          Enter some markdown
+        </label>
+        <textarea
+          id="markdown-content"
+          onChange={this.handleChange}
+          defaultValue={this.state.value}
+        />
+        <h3>Output</h3>
+        <div
+          className="content"
+          dangerouslySetInnerHTML={this.getRawMarkup()}
+        />
+      </div>
+    );
+  }
+}
+
+export default App;
+
+```
+
+<hr>
+
 ## [11/03 10주차 수업 ]
 
 > 오늘 주요내용
