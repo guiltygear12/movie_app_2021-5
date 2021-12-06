@@ -2,6 +2,142 @@
 
 <hr>
 
+## [12/01 14주차 수업]
+
+#### 함수에서 클래스로 변환하기
+
+```js
+// 함수 형태로 코딩
+function Clock(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>It is {props.date.toLocaleTimeString()}.</h2>
+    </div>
+  );
+}
+
+function tick() {
+  ReactDOM.render(
+    <Clock date={new Date()} />,
+    document.getElementById('root')
+  );
+}
+
+setInterval(tick, 1000);
+```
+### 클래스로 변환하는 과정
+* React.Component를 확장하는 동일한 이름의 ES6 class를 생성합니다.
+* render()라고 불리는 빈 메서드를 추가합니다.
+* 함수의 내용을 render() 메서드 안으로 옮깁니다.
+* render() 내용 안에 있는 props를 this.props로 변경합니다.
+* 남아있는 빈 함수 선언을 삭제합니다.
+```js
+// 클래스 형태로 변환
+
+// ES6 class를 생성
+class Clock extends React.Component {
+  // render()라고 불리는 빈 메서드를 추가
+  render() {
+    // 함수의 내용을 render() 메서드 안으로 옮깁니다
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        // props를 this.props로 변경
+        <h2>It is {this.props.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+function tick() {
+  ReactDOM.render(
+    <Clock date={new Date()} />,
+    document.getElementById('root')
+  );
+}
+
+setInterval(tick, 1000);
+```
+
+### 클래스에 로컬 state 추가하기
+```js
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    // class constructor를 추가
+    this.state = {date: new Date()};
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        //  this.props.date를 this.state.date로 변경
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('root')
+);
+
+```
+### 조건부 렌더링
+```js
+function WarningBanner(props) {
+  if (!props.warn) {
+    // 컴포넌트 렌더링 방지
+    return null;
+  }
+
+  return (
+    <div className="warning">
+      Warning!
+    </div>
+  );
+}
+
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {showWarning: true}
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+
+  handleToggleClick() {
+    this.setState(prevState => ({
+      showWarning: !prevState.showWarning
+    }));
+  }
+  
+  render() {
+    return (
+      <div>
+      // warn prop의 값에 의하여 렌더링 여부를 확인하여 렌더링
+        <WarningBanner warn={this.state.showWarning} />
+        <button onClick={this.handleToggleClick}>
+        // 조건부 연산자로 if-else구문 인라인으로 표현
+          {this.state.showWarning ? 'Hide' : 'Show'}
+        </button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Page />,
+  document.getElementById('root')
+);
+```
+
+#### 7장 까지 진행
+
+<hr>
+
 ## [11/17 12주차 수업]
 
 REACT 공식문서
