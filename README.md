@@ -2,6 +2,228 @@
 
 <hr>
 
+## [12/08 15주차 수업 (보강)]
+
+### 리스트와 Key
+> 아래는 map()함수를 이용하여 numbers 배열의 값을 두배로 만든 후 map()에서 반환하는 새 배열을 doubled 변수에 할당하고 로그를 확인하는 코드입니다.
+```js
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((number) => number * 2);
+console.log(doubled);
+```
+#### 여러개의 컴포넌트 렌더링 하기
+* 엘리먼트 모음을 만들고 중괄호 {}를 이용하여 JSX에 포함 시킬 수 있습니다.
+
+>아래의 JavaScript map() 함수를 사용하여 numbers 배열을 반복 실행합니다. 각 항목에 대해 < li> 엘리먼트를 반환하고 엘리먼트 배열의 결과를 listItems에 저장합니다. listItems 배열을 < ul>엘리먼트 안에 포함하고 DOM에 렌더링합니다.
+
+[codepen 에서 실행해보기](https://codepen.io/gaearon/pen/GjPyQr?editors=0011)
+
+#### 기본 리스트 컴포넌트
+
+* 이전 예시를 numbers 배열을 받아서 순서 없는 엘리먼트 리스트를 출력하는 컴포넌트로 리팩토링할 수 있습니다.
+
+*  key를 넣어야 한다는 경고가 표시됩니다. “key”는 엘리먼트 리스트를 만들 때 포함해야 하는 특수한 문자열 어트리뷰트입니다.
+
+[codepen 에서 실행해보기](https://codepen.io/gaearon/pen/jrXYRR?editors=0011)
+
+
+#### Key
+
+> * React가 어떤 항목을 변경, 추가 또는 삭제할지 식별하는 것에 도움을 줍니다
+> * 엘리먼트에 안정적인 고유성을 부여하기 위해 배열 내부의 엘리먼트에 지정
+> * 항목이 고정적인 순서를 가질때 사용을합니다 
+> * 순서가 유동적인 경우에는 사용에 주의 가 필요합니다 성능저하및 state와 충돌이 발생할수있습니다.
+
+#### key 로 컴포넌트 추출하기
+
+키는 주변 배열의 context에서만 의미가 있습니다
+
+>예를 들어 ListItem 컴포넌트를 추출 한 경우 ListItem 안에 있는 < li> 엘리먼트가 아니라 배열의 < ListItem /> 엘리먼트가 key를 가져야 합니다.
+
+#### ※ 잘못된 사용법
+```js
+function ListItem(props) {
+  const value = props.value;
+  return (
+    // 틀렸습니다! 여기에는 key를 지정할 필요가 없습니다.
+    <li key={value.toString()}>
+      {value}
+    </li>
+  );
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // 틀렸습니다! 여기에 key를 지정해야 합니다.
+    <ListItem value={number} />
+  );
+  return (
+    <ul>
+      {listItems}
+    </ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+```
+#### ※ 적절한 사용법
+```js
+function ListItem(props) {
+  // 맞습니다! 여기에는 key를 지정할 필요가 없습니다.
+  return <li>{props.value}</li>;
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // 맞습니다! 배열 안에 key를 지정해야 합니다.
+    <ListItem key={number.toString()} value={number} />
+  );
+  return (
+    <ul>
+      {listItems}
+    </ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('root')
+);
+```
+#### key는 형제 사이에서만 고유한 값이어야 한다
+>* key는 배열 안에서만 고유성을 가져도 가능합니다
+>* 다수의 배열을 사용할때에 동일한 키값을 가져도 무방합니다
+
+[codepen에서 확인해보기](https://codepen.io/gaearon/pen/NRZYGN?editors=0010)
+
+* React에서 key는 힌트를 제공하지만 컴포넌트로 전달하지는 않습니다. 컴포넌트에서 key와 동일한 값이 필요하면 다른 이름의 prop으로 명시적으로 전달합니다.
+
+```js
+const content = posts.map((post) =>
+  <Post
+    key={post.id}
+    id={post.id}
+    title={post.title} />
+);
+```
+
+#### jsx에 map() 포함시키기
+
+* JSX를 사용하면 중괄호 안에 모든 표현식을 포함 시킬 수 있으므로 map() 함수의 결과를 인라인으로 처리할 수 있습니다.
+
+* 이 방식을 사용하면 코드가 더 깔끔해 지지만, 이 방식을 남발하는 것은 좋지 않습니다. 
+
+* JavaScript와 마찬가지로 가독성을 위해 변수로 추출해야 할지 아니면 인라인으로 넣을지는 개발자가 직접 판단해야 합니다. 
+
+* map() 함수가 너무 중첩된다면 컴포넌트로 추출 하는 것이 좋습니다.
+
+
+### 9. 폼
+
+#### 제어 컴포넌트 (Controlled Component)
+
+* HTML에서 < input>, < textarea>, < select>와 같은 폼 엘리먼트는 일반적으로 사용자의 입력을 기반으로 자신의 state를 관리하고 업데이트합니다
+
+* React에서는 변경할 수 있는 state가 일반적으로 컴포넌트의 state 속성에 유지되며 setState()에 의해 업데이트
+
+이름이 기록되는 폼을 제어 컴포넌트로 작성이 가능합니다
+
+[codepen 에서 확인하기](https://codepen.io/gaearon/pen/VmmPgp?editors=0010)
+
+* value 어트리뷰트는 폼 엘리먼트에 설정되므로 표시되는 값은 항상 this.state.value
+
+* 모든 키 입력에서 handleChange가 동작하기 때문에 사용자가 입력할 때 보여지는 값이 업데이트됩니다.
+
+#### textarea 태그
+* HTML에서 < textarea> 엘리먼트는 텍스트를 자식으로 정의합니다
+
+* this.state.value를 생성자에서 초기화하므로 textarea는 일부 텍스트를 가진채 시작되는 점을 주의
+#### select 태그
+
+#### 다중 입력 제어하기
+
+
+### state 끌어올리기
+>주어진 온도에서 물의 끓는 여부를 추정하는 온도 계산기를 만들어볼 것입니다.
+
+* BoilingVerdict라는 이름의 컴포넌트부터 만들어봅시다. 이 컴포넌트는 섭씨온도를 의미하는 celsius prop를 받아서 이 온도가 물이 끓기에 충분한지 여부를 출력합니다.
+
+* Calculator라는 컴포넌트를 만들어보겠습니다. 이 컴포넌트는 온도를 입력할 수 있는 < input>을 렌더링하고 그 값을 this.state.temperature에 저장
+
+[codepen 에서 확인하기](https://codepen.io/gaearon/pen/ZXeOBm?editors=0010)
+
+#### 두번째 input 추가하기
+>섭씨 입력 필드뿐만 아니라 화씨 입력 필드를 추가하고 두 필드 간에 동기화 상태를 유지
+
+* Calculator에서 TemperatureInput 컴포넌트를 빼내는 작업부터 시작해봅시다. 또한 "c" 또는 "f"의 값을 가질 수 있는 scale prop를 추가
+
+* 이제 Calculator가 분리된 두 개의 온도 입력 필드를 렌더링하도록 변경할 수 있습니다.
+
+[codepen 에서 확인하기](https://codepen.io/gaearon/pen/jGBryx?editors=0010)
+>이제 두 개의 입력 필드를 갖게 되었습니다. 그러나 둘 중 하나에 온도를 입력하더라도 다른 하나는 갱신되지 않는 문제
+
+#### 변환 함수 작성하기
+
+> 섭씨 <-->  화씨 를 계산해주는 함수를 작성합니다. 
+
+```js
+// 화씨 > 섭씨
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+// 섭씨 > 화씨
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+```
+
+* 이 함수는 올바르지 않은 temperature 값에 대해서는 빈 문자열을 반환하고 값을 소수점 세 번째 자리로 반올림하여 출력
+
+```js
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+```
+* tryConvert('abc', toCelsius)는 빈 문자열을 반환
+* tryConvert('10.22', toFahrenheit)는 '50.396'을 반환
+
+#### state 끌어올리기
+
+> 위의 과정까지 진행시에 각각의 입력값을 자신의  state에 독립적으로 저장하고 있습니다.
+
+###### 입력값을 변경할 때 일어나는 일들을 정리해보겠습니다.
+
+> * React는 DOM < input>의 onChange에 지정된 함수를 호출합니다. 위 예시의 경우 TemperatureInput의 handleChange 메서드에 해당합니다.
+>* TemperatureInput 컴포넌트의 handleChange 메서드는 새로 입력된 값과 함께 this.props.onTemperatureChange()를 호출합니다. onTemperatureChange를 포함한 이 컴포넌트의 props는 부모 컴포넌트인 Calculator로부터 제공받은 것입니다.
+>* 이전 렌더링 단계에서, Calculator는 섭씨 TemperatureInput의 onTemperatureChange를 Calculator의 handleCelsiusChange 메서드로, 화씨 TemperatureInput의 onTemperatureChange를 Calculator의 handleFahrenheitChange 메서드로 지정해놓았습니다. 따라서 우리가 둘 중에 어떤 입력 필드를 수정하느냐에 따라서 Calculator의 두 메서드 중 하나가 호출됩니다.
+>* 이들 메서드는 내부적으로 Calculator 컴포넌트가 새 입력값, 그리고 현재 수정한 입력 필드의 입력 단위와 함께 this.setState()를 호출하게 함으로써 React에게 자신을 다시 렌더링하도록 요청합니다.
+>* React는 UI가 어떻게 보여야 하는지 알아내기 위해 Calculator 컴포넌트의 render 메서드를 호출합니다. 두 입력 필드의 값은 현재 온도와 활성화된 단위를 기반으로 재계산됩니다. 온도의 변환이 이 단계에서 수행됩니다.
+>* React는 Calculator가 전달한 새 props와 함께 각 TemperatureInput 컴포넌트의 render 메서드를 호출합니다. 그러면서 UI가 어떻게 보여야 할지를 파악합니다.
+>* React는 BoilingVerdict 컴포넌트에게 섭씨온도를 props로 건네면서 그 컴포넌트의 render 메서드를 호출합니다.
+> * React DOM은 물의 끓는 여부와 올바른 입력값을 일치시키는 작업과 함께 DOM을 갱신합니다. 값을 변경한 입력 필드는 현재 입력값을 그대로 받고, 다른 입력 필드는 변환된 온도 값으로 갱신됩니다.
+
+### 합성 (Composition) vs 상속 (Inheritance)
+
+##### 컴포넌트에서 다른 컴포넌트를 담기
+
+* 어떤 컴포넌트들은 어떤 자식 엘리먼트가 들어올 지 미리 예상할 수 없는 경우가 있습니다
+
+
+<hr>
+
 ## [12/01 14주차 수업]
 
 #### 함수에서 클래스로 변환하기
